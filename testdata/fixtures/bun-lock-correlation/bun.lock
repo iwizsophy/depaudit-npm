@@ -1,0 +1,12 @@
+{
+  "packages": {
+    "plain-crypto-js@4.2.1": {
+      "name": "plain-crypto-js",
+      "version": "4.2.1"
+    },
+    "axios@1.14.1": {
+      "name": "axios",
+      "version": "1.14.1"
+    }
+  }
+}

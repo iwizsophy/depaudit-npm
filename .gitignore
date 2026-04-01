@@ -1,0 +1,8 @@
+dist/
+wsl-out-*/
+wsl-targets.txt
+scan-result-fast/
+bin/
+coverage.out
+coverage.html
+coverage-summary.txt

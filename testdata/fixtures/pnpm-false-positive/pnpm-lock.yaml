@@ -1,0 +1,15 @@
+lockfileVersion: '9.0'
+
+importers:
+  .:
+    dependencies:
+      axios:
+        specifier: ^1.10.0
+        version: 1.10.0
+
+packages:
+  axios@1.10.0:
+    resolution: {integrity: sha512-example}
+
+  '@webassemblyjs/ast@1.14.1':
+    resolution: {integrity: sha512-example}

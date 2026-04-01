@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    tags-ignore:
+      - "v*.*.*"
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Verify formatting
+        shell: bash
+        run: |
+          files=$(find . -name '*.go' -not -path './dist/*' -not -path './bin/*')
+          if [ -n "$files" ]; then
+            unformatted=$(gofmt -l $files)
+            if [ -n "$unformatted" ]; then
+              echo "The following files need gofmt:"
+              echo "$unformatted"
+              exit 1
+            fi
+          fi
+
+      - name: Test
+        run: go test -covermode=atomic -coverprofile=coverage.out ./...
+
+      - name: Generate coverage summary
+        shell: bash
+        run: |
+          go tool cover -func=coverage.out | tee coverage-summary.txt
+          go tool cover -html=coverage.out -o coverage.html
+          {
+            echo "## Coverage"
+            echo
+            echo '```text'
+            cat coverage-summary.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: |
+            coverage.out
+            coverage-summary.txt
+            coverage.html
+          if-no-files-found: error
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+          - windows-latest
+          - macos-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build
+        run: go build .

@@ -1,0 +1,153 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  verify-tag:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Validate semantic version tag
+        shell: bash
+        run: |
+          if [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Expected an exact vX.Y.Z tag, got: ${GITHUB_REF_NAME}" >&2
+            exit 1
+          fi
+
+      - name: Validate annotated tag
+        shell: bash
+        run: |
+          tag_type=$(git for-each-ref "refs/tags/${GITHUB_REF_NAME}" --format='%(objecttype)')
+          if [[ "${tag_type}" != "tag" ]]; then
+            echo "Tag ${GITHUB_REF_NAME} must be annotated." >&2
+            exit 1
+          fi
+
+      - name: Validate tagged commit is on main
+        shell: bash
+        run: |
+          git fetch --no-tags origin main
+          tag_commit=$(git rev-list -n 1 "${GITHUB_REF_NAME}")
+          if ! git merge-base --is-ancestor "${tag_commit}" "origin/main"; then
+            echo "Tag ${GITHUB_REF_NAME} points to ${tag_commit}, which is not contained in origin/main." >&2
+            exit 1
+          fi
+
+  verify:
+    needs: verify-tag
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Test
+        run: go test ./...
+
+  build:
+    needs: verify
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            goos: linux
+            goarch: amd64
+            binary_name: depaudit-npm
+            archive_ext: tar.gz
+          - os: windows-latest
+            goos: windows
+            goarch: amd64
+            binary_name: depaudit-npm.exe
+            archive_ext: zip
+          - os: macos-latest
+            goos: darwin
+            goarch: arm64
+            binary_name: depaudit-npm
+            archive_ext: tar.gz
+
+    runs-on: ${{ matrix.os }}
+    env:
+      PACKAGE_NAME: depaudit-npm-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}
+      ARCHIVE_NAME: depaudit-npm-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}.${{ matrix.archive_ext }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build binary
+        shell: bash
+        run: |
+          package_root="release-root/${PACKAGE_NAME}"
+          mkdir -p "${package_root}/docs/assets"
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o "${package_root}/${{ matrix.binary_name }}" .
+          cp README.md README.ja.md LICENSE CHANGELOG.md targets.txt "${package_root}/"
+          cp docs/assets/depaudit-npm-icon.png "${package_root}/docs/assets/"
+
+      - name: Create archive (tar.gz)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          tar -czf "${ARCHIVE_NAME}" -C release-root .
+
+      - name: Create archive (zip)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: Compress-Archive -Path release-root\* -DestinationPath $env:ARCHIVE_NAME
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ARCHIVE_NAME }}
+          path: ${{ env.ARCHIVE_NAME }}
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: release-artifacts
+
+      - name: Generate checksums
+        shell: bash
+        run: |
+          cd release-artifacts
+          find . -type f ! -name 'SHA256SUMS.txt' -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-artifacts/**/*
+          fail_on_unmatched_files: true
+          generate_release_notes: true
