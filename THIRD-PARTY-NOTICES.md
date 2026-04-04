@@ -19,11 +19,21 @@ repository dependency graph through `go.mod`.
   the MIT License
 - Source: `gopkg.in/yaml.v3`
 
+## Trademarks
+
+- Third-party product names, project names, and logos mentioned in this
+  repository or its distributed materials are the property of their respective
+  owners.
+- Inclusion in this project does not imply sponsorship, endorsement, or
+  affiliation unless explicitly stated by the trademark owner.
+
 ## Update policy
 
 - Update this file when a dependency is added, removed, or its version changes
   in `go.mod`.
 - Re-check license terms when dependency versions change.
+- Re-check whether any dependency or bundled material requires additional
+  trademark attribution when versions or included assets change.
 - If a module ships multiple notices or mixed-license files, summarize that
   fact here and retain the upstream notice requirements in distributed
   materials when applicable.
