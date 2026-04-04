@@ -19,6 +19,7 @@ Each release archive is expected to contain:
 - `README.ja.md`
 - `LICENSE`
 - `THIRD-PARTY-NOTICES.md`
+- `SBOM.spdx.json`
 - `docs/assets/depaudit-npm-icon.png`
 
 Extract the archive to a local directory before running the tool.

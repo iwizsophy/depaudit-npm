@@ -11,6 +11,7 @@
 主な配布形態は、実行ファイル、`targets.txt`、ドキュメント、
 `THIRD-PARTY-NOTICES.md` を含んだプラットフォーム別の release archive
 です。
+各 archive には、Syft で生成した SBOM `SBOM.spdx.json` も含まれます。
 
 ## 主な機能
 
@@ -161,3 +162,5 @@ go test ./...
 MIT License です。詳細は [LICENSE](./LICENSE) を参照してください。
 同梱依存のライセンス notice は
 [THIRD-PARTY-NOTICES.md](./THIRD-PARTY-NOTICES.md) に記載しています。
+Syft 生成の SPDX JSON SBOM は各 release archive に
+`SBOM.spdx.json` として同梱されます。
