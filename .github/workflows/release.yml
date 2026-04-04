@@ -102,14 +102,18 @@ jobs:
           go-version-file: go.mod
           cache: true
 
+      - name: Set up Syft
+        uses: anchore/sbom-action/download-syft@v0
+
       - name: Build binary
         shell: bash
         run: |
           package_root="release-root/${PACKAGE_NAME}"
           mkdir -p "${package_root}/docs/assets"
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o "${package_root}/${{ matrix.binary_name }}" .
-          cp README.md README.ja.md LICENSE CHANGELOG.md targets.txt "${package_root}/"
+          cp README.md README.ja.md LICENSE THIRD-PARTY-NOTICES.md CHANGELOG.md targets.txt "${package_root}/"
           cp docs/assets/depaudit-npm-icon.png "${package_root}/docs/assets/"
+          syft dir:"${package_root}" -o spdx-json="${package_root}/SBOM.spdx.json"
 
       - name: Create archive (tar.gz)
         if: runner.os != 'Windows'

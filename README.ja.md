@@ -6,9 +6,12 @@
 
 `targets.txt` または `--targets-file` によって任意の package を検査できます。
 
-`1.0.0` は最初の公開 stable release です。
+`1.1.0` は現行の stable release です。
 
-主な配布形態は、実行ファイル、`targets.txt`、ドキュメントを含んだプラットフォーム別の release archive です。
+主な配布形態は、実行ファイル、`targets.txt`、ドキュメント、
+`THIRD-PARTY-NOTICES.md` を含んだプラットフォーム別の release archive
+です。
+各 archive には、Syft で生成した SBOM `SBOM.spdx.json` も含まれます。
 
 ## 主な機能
 
@@ -21,7 +24,7 @@
 
 ## クイックスタート
 
-1. 利用する OS 向けの `v1.0.0` release archive をダウンロードする
+1. 利用する OS 向けの `v1.1.0` release archive をダウンロードする
 2. 任意のフォルダへ展開する
 3. 既定の検査対象を変えたい場合は、同梱の `targets.txt` を編集する
 4. 展開したフォルダ内のバイナリを実行する
@@ -150,9 +153,14 @@ go test ./...
 
 - [Setup](./docs/setup.md)
 - [Development](./docs/development.md)
+- [Third-party notices](./THIRD-PARTY-NOTICES.md)
 
 通常利用では release archive を使ってください。ソースからのビルドは、開発や独自パッケージングが必要な場合だけを想定しています。
 
 ## ライセンス
 
 MIT License です。詳細は [LICENSE](./LICENSE) を参照してください。
+同梱依存のライセンス notice は
+[THIRD-PARTY-NOTICES.md](./THIRD-PARTY-NOTICES.md) に記載しています。
+Syft 生成の SPDX JSON SBOM は各 release archive に
+`SBOM.spdx.json` として同梱されます。
