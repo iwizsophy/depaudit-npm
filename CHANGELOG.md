@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project aims to follow Semantic Versioning.
 
+## [1.1.0] - 2026-04-05
+
+### Added
+
+- `THIRD-PARTY-NOTICES.md` to release archives for bundled dependency notices
+- Syft-generated `SBOM.spdx.json` to release archives
+- Trademark attribution guidance in `THIRD-PARTY-NOTICES.md`
+
 ## [1.0.0] - 2026-04-01
 
 ### Added
