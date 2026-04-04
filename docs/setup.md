@@ -2,12 +2,12 @@
 
 ## Prerequisites
 
-- The `v1.0.0` release archive for your platform
+- The `v1.1.0` release archive for your platform
 - File-system access to the repositories or directories you want to scan
 
 You do not need Go to use the packaged binary. Go is only required when building from source.
 
-The first public stable release is `v1.0.0`.
+The current stable release is `v1.1.0`.
 
 ## Release Archive Contents
 

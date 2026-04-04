@@ -6,7 +6,7 @@
 
 `targets.txt` または `--targets-file` によって任意の package を検査できます。
 
-`1.0.0` は最初の公開 stable release です。
+`1.1.0` は現行の stable release です。
 
 主な配布形態は、実行ファイル、`targets.txt`、ドキュメント、
 `THIRD-PARTY-NOTICES.md` を含んだプラットフォーム別の release archive
@@ -24,7 +24,7 @@
 
 ## クイックスタート
 
-1. 利用する OS 向けの `v1.0.0` release archive をダウンロードする
+1. 利用する OS 向けの `v1.1.0` release archive をダウンロードする
 2. 任意のフォルダへ展開する
 3. 既定の検査対象を変えたい場合は、同梱の `targets.txt` を編集する
 4. 展開したフォルダ内のバイナリを実行する
