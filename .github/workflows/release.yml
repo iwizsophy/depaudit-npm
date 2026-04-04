@@ -108,7 +108,7 @@ jobs:
           package_root="release-root/${PACKAGE_NAME}"
           mkdir -p "${package_root}/docs/assets"
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o "${package_root}/${{ matrix.binary_name }}" .
-          cp README.md README.ja.md LICENSE CHANGELOG.md targets.txt "${package_root}/"
+          cp README.md README.ja.md LICENSE THIRD-PARTY-NOTICES.md CHANGELOG.md targets.txt "${package_root}/"
           cp docs/assets/depaudit-npm-icon.png "${package_root}/docs/assets/"
 
       - name: Create archive (tar.gz)

@@ -8,7 +8,9 @@
 
 `1.0.0` は最初の公開 stable release です。
 
-主な配布形態は、実行ファイル、`targets.txt`、ドキュメントを含んだプラットフォーム別の release archive です。
+主な配布形態は、実行ファイル、`targets.txt`、ドキュメント、
+`THIRD-PARTY-NOTICES.md` を含んだプラットフォーム別の release archive
+です。
 
 ## 主な機能
 
@@ -150,9 +152,12 @@ go test ./...
 
 - [Setup](./docs/setup.md)
 - [Development](./docs/development.md)
+- [Third-party notices](./THIRD-PARTY-NOTICES.md)
 
 通常利用では release archive を使ってください。ソースからのビルドは、開発や独自パッケージングが必要な場合だけを想定しています。
 
 ## ライセンス
 
 MIT License です。詳細は [LICENSE](./LICENSE) を参照してください。
+同梱依存のライセンス notice は
+[THIRD-PARTY-NOTICES.md](./THIRD-PARTY-NOTICES.md) に記載しています。

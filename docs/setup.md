@@ -18,6 +18,7 @@ Each release archive is expected to contain:
 - `README.md`
 - `README.ja.md`
 - `LICENSE`
+- `THIRD-PARTY-NOTICES.md`
 - `docs/assets/depaudit-npm-icon.png`
 
 Extract the archive to a local directory before running the tool.
