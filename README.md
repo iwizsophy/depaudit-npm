@@ -8,7 +8,10 @@ You can scan for arbitrary packages through `targets.txt` or `--targets-file`.
 
 Version `1.0.0` is the first public stable release.
 
-The primary distribution model is a platform-specific release archive that already contains the binary, `targets.txt`, and the bundled documentation.
+The primary distribution model is a platform-specific release archive that
+already contains the binary, `targets.txt`, the bundled documentation, and
+`THIRD-PARTY-NOTICES.md`.
+Each archive also includes a Syft-generated SBOM as `SBOM.spdx.json`.
 
 ## Features
 
@@ -153,9 +156,14 @@ go test ./...
 - [Japanese README](./README.ja.md)
 - [Setup](./docs/setup.md)
 - [Development](./docs/development.md)
+- [Third-party notices](./THIRD-PARTY-NOTICES.md)
 
 If you only want to run the tool, use the release archive. Building from source is only needed for development or custom packaging.
 
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE).
+Third-party license notices for bundled dependencies are listed in
+[THIRD-PARTY-NOTICES.md](./THIRD-PARTY-NOTICES.md).
+A Syft-generated SPDX JSON SBOM is distributed as
+`SBOM.spdx.json` in each release archive.
