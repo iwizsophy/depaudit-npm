@@ -8,6 +8,28 @@ You can scan for arbitrary packages through `targets.txt` or `--targets-file`.
 
 Version `1.1.0` is the current stable release.
 
+## Background
+
+This tool was built in response to the 2026 npm supply chain attacks involving `axios` and `plain-crypto-js`.
+
+At the time, sample code creation and package builds were happening during the affected window, so there was a real possibility that the local environment had been exposed. It was difficult to quickly determine whether that had actually happened because of a few practical gaps:
+
+- There was no easy way to confirm not only direct dependencies but also transitive ones.
+- A lockfile alone does not prove whether the package contents actually existed locally.
+- Cross-checking `node_modules` and cache artifacts still required manual investigation.
+
+Existing tools such as `Trivy`, `npm audit`, and `osv-scanner` are effective for vulnerability detection, but they are not designed for the narrower incident-response question of whether a specific package existed somewhere in the environment by any path.
+
+`depaudit-npm` was created for that use case: incident-driven, evidence-based confirmation of package presence.
+
+The goal of this tool is not to identify a specific vulnerability, but to confirm the fact of whether a package existed in the environment.
+
+The default target definition file bundled with this tool already includes settings that can detect the `axios` / `plain-crypto-js` supply chain incident. You can use it as-is to immediately check whether your environment shows evidence related to that incident.
+
+You can also modify the definition file to run the same style of investigation for any npm package.
+
+The repository includes test data that corresponds to the `axios` / `plain-crypto-js` supply chain incident so the scan behavior can be validated. This does not affect normal use, but it is worth keeping in mind when reading the source tree.
+
 The primary distribution model is a platform-specific release archive that
 already contains the binary, `targets.txt`, the bundled documentation, and
 `THIRD-PARTY-NOTICES.md`.
